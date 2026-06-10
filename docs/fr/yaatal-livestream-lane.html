@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YAATAL — Voie Livestream : Sous-titrage vs Doublage</title>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kick"><span class="d"></span> Voie Livestream · Sous-titres vs Doublage · Juin 2026</div>
+  <h1>La voie livestream<br>est <em>deux produits.</em></h1>
+  <p class="lede">La sortie hier de Nemotron 3.5 ASR déplace la voie livestream vers un modèle en cascade et l'éloigne de la dépendance à Hibiki — pour la majeure partie de ce que vous livrerez. Mais le sous-titrage et le doublage ont des besoins différents, et un seul est entièrement dé-risqué.</p>
+  <p class="stamp">Nemotron 3.5 ASR = transcription parole→texte (40 langues). Il ne traduit pas et ne parle pas. C'est un composant, pas un remplacement de Hibiki.</p>
+
+  <hr>
+
+  <!-- REFRAME -->
+  <div class="reframe">
+    <div class="l"><span class="a">Voie sous-titres</span> → Cascade ASR + MT. <span class="a">Dé-risquée — à construire.</span><small>Chaque composant existe. Évite tout le mur de faisabilité et de données de Hibiki.</small></div>
+    <div class="l"><span class="b">Voie doublage</span> → Cascade + TTS, OU Hibiki. <span class="b">Un compromis latence vs faisabilité.</span><small>La cascade est maintenant plus attractive : toutes les pièces existent, l'adaptation de Hibiki au Wolof reste douteuse.</small></div>
+  </div>
+
+  <hr>
+
+  <!-- TWO PRODUCTS -->
+  <h2>Les deux sous-produits</h2>
+  <p class="sec-note">Même entrée (un flux Wolof en direct), sortie différente. Le choix de la sortie décide de l'architecture et du verrou restant.</p>
+
+  <div class="prods">
+
+    <!-- CAPTION -->
+    <div class="prod cap">
+      <div class="prod-head">
+        <span class="tag">Sortie: texte à l'écran</span>
+        <h3>Sous-titrage / Captions</h3>
+        <div class="sub">Sous-titres textuels traduits sur le flux. Parole Wolof → Texte Français (ou Wolof).</div>
+        <span class="status derisk">✓ dé-risqué · à construire</span>
+      </div>
+      <div class="prod-body">
+        <div class="pipe">
+          <div class="pstep asr"><div class="dot">1</div><div class="txt"><b>ASR en continu</b> — Parole Wolof → texte<br><span class="tool"><a href="https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b">Nemotron 3.5 ASR</a> · 80–320ms · ponctué · détection automatique</span></div></div>
+          <div class="pstep mt"><div class="dot">2</div><div class="txt"><b>MT</b> — Texte Wolof → texte Français<br><span class="tool"><a href="https://github.com/Galsenaicommunity/Wolof-NMT">Wolof-NMT</a> (NLLB) · MIT · bidirectionnel</span></div></div>
+        </div>
+        <div class="gate-line">
+          <span class="lbl">verrou restant</span>
+          <b>Le Wolof nécessite un bootstrap pour l'ASR</b> (absent des 40 langues de base). L'étape ASR doit être affinée sur des audios Wolof en premier — même verrou que l'évaluation edge-ASR. Une fois résolu, la voie est de la pure composition.
+        </div>
+      </div>
+    </div>
+
+    <!-- DUB -->
+    <div class="prod dub">
+      <div class="prod-head">
+        <span class="tag">Sortie: parole vocale</span>
+        <h3>Doublage / Voix</h3>
+        <div class="sub">Parole française sur le flux. Pour les utilisateurs ne sachant pas lire les sous-titres — réalité de la faible alphabétisation.</div>
+        <span class="status trade">⚖ compromis · cascade ou Hibiki</span>
+      </div>
+      <div class="prod-body">
+        <div class="pipe">
+          <div class="pstep asr"><div class="dot">1</div><div class="txt"><b>ASR en continu</b> → texte<br><span class="tool">Nemotron 3.5 ASR</span></div></div>
+          <div class="pstep mt"><div class="dot">2</div><div class="txt"><b>MT</b> → texte Français<br><span class="tool">Wolof-NMT</span></div></div>
+          <div class="pstep tts"><div class="dot">3</div><div class="txt"><b>TTS en continu</b> → Parole française<br><span class="tool">TTS français en continu — composant TBD (ex: MOSS-TTS-Nano-100M)</span></div></div>
+        </div>
+        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);margin:4px 0 14px">— ou, monolithique —</div>
+        <div class="pipe">
+          <div class="pstep s2s"><div class="dot">H</div><div class="txt"><b>Hibiki S2ST</b> — Audio Wolof → Audio Français, un seul modèle<br><span class="tool">latence plus faible · mais risque de recherche + mur de données</span></div></div>
+        </div>
+        <div class="gate-line">
+          <span class="lbl">verrou restant</span>
+          <b>Deux verrous :</b> le bootstrap ASR (comme ci-dessus) PLUS l'étape de sortie TTS. La cascade ajoute la pile de latence ASR→MT→TTS; Hibiki offre une latence plus faible d'audio à audio mais est sur la voie de recherche risquée (doutes de Kyutai sur l'adaptation aux nouvelles langues, mur de données stéréo+sidecar).
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <!-- WHY NEMOTRON IS MORE TAILORED -->
+  <h2>Pourquoi l'ASR Nemotron 3.5 est plus adapté que Hibiki — pour la phase ASR</h2>
+  <p class="sec-note">Votre intuition concrétisée. Hibiki est conçu pour le doublage monolithique; ceci est conçu pour le sous-titrage + l'étape ASR de la traduction — exactement la moitié dé-risquée.</p>
+  <div class="why">
+    <div class="w"><div class="h">Le sous-titrage est un cas d'usage répertorié</div><p>NVIDIA l'a conçu pour les "sous-titres de réunions multilingues en direct" et la "transcription + traduction en temps réel pour les livestreams et événements." Hibiki est conçu pour le doublage; ceci est conçu pour le sous-titrage.</p></div>
+    <div class="w"><div class="h">La détection auto de la langue s'adapte à la réalité de la diffusion</div><p>target_lang=auto gère un locuteur de Dakar alternant Wolof↔Français en milieu de phrase — le problème de l'hypothèse de langue fixe. Hibiki suppose une source fixe.</p></div>
+    <div class="w"><div class="h">Le bouton de latence est ajustable pour la diffusion</div><p>att_context_size s'étend de 80ms à 1.12s sur le même checkpoint — sous-titrage à 320ms, agent vocal à 80ms, même modèle. Hibiki propose un profil unique.</p></div>
+    <div class="w"><div class="h">Ponctuation native</div><p>Texte avec casse et ponctuation prêt pour la production — la différence entre des sous-titres lisibles et un mur de minuscules. Hors de portée pour Hibiki (qui produit de la parole).</p></div>
+    <div class="w"><div class="h">Dans la famille + l'encodeur SALM-Duplex</div><p>Même FastConformer que la recette duplex veut pour son slot d'encodeur. Un seul composant sert le sous-titrage ET le niveau duplex. Lignée cohérente avec le backbone Nemotron.</p></div>
+  </div>
+
+  <hr>
+
+  <!-- HIBIKI POSITION -->
+  <h2>Où cela laisse Hibiki</h2>
+  <div class="hib">
+    <h3>Hibiki se réduit de "dépendance" à "optionnel, ultérieur, restreint"</h3>
+    <p>Avant hier : la voie livestream <b>dépendait</b> de la résolution de Hibiki (risque de recherche, mur de données). Après : l'essentiel de ce que vous livreriez — sous-titrage + traduction texte — est une <b>cascade de pièces qui existent toutes</b>, pas besoin de Hibiki.</p>
+    <p>Niche restante de Hibiki : <b>seulement si la latence du doublage vocal s'avère insuffisante via la cascade.</b> Le S2ST audio-à-audio monolithique a un argument de latence réel que la pile ASR→MT→TTS ne peut égaler. Mais c'est un pari beaucoup plus petit, ultérieur et optionnel.</p>
+    <p>[Inférence] Net : la sortie hier déplace la voie livestream vers la cascade et rétrograde Hibiki en tant que contingence pour un sous-cas unique.</p>
+  </div>
+
+  <hr>
+
+  <!-- THE USER QUESTION -->
+  <h2>La question décisive</h2>
+  <div class="uq">
+    <h3>La voie livestream a-t-elle besoin d'une sortie voix — et pour qui ?</h3>
+    <p>Pour les <b>utilisateurs peu alphabétisés</b>, les sous-titres peuvent être inappropriés (incapacité à les lire), ce qui pousse vers la <b>voix</b>, maintenant vivante la question du TTS-ou-Hibiki. Pour la <b>couche de traduction d'utilité publique</b> (écoles, événements, public mixte), l'association sous-titres + voix est plausible.</p>
+    <p style="margin-top:8px">Le choix de la sortie décide si la cascade Nemotron <b>remplace complètement</b> la dépendance Hibiki ou la <b>réduit</b> simplement. La voie sous-titres est construisable maintenant; l'architecture du doublage dépend de cette réponse.</p>
+  </div>
+
+  <p class="end">
+    <b>SYNTHÈSE</b> &nbsp;livestream = deux produits : sous-titres (cascade dé-risquée) + doublage (compromis cascade/Hibiki)<br>
+    <b>SOUS-TITRES</b> &nbsp;Nemotron 3.5 ASR + Wolof-NMT · tous les composants existent · verrou = bootstrap ASR Wolof<br>
+    <b>DOUBLAGE</b> &nbsp;cascade + TTS en continu, OU Hibiki monolithique · verrou = bootstrap ASR + sortie TTS / compromis latence<br>
+    <b>HIBIKI</b> &nbsp;rétrogradé de dépendance à contingence optionnelle pour la latence du doublage vocal uniquement<br>
+    <b>ALERTES</b> &nbsp;Wolof absent des 40 langues (cas bootstrap) · Licence Nemotron 3.5 ASR = OpenMDW-1.1 [à vérifier] · Composant TTS français en continu toujours à déterminer
+  </p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+[
+  {
+    "id": "google-colab",
+    "category": {
+      "en": "Notebooks & Compute",
+      "fr": "Calepins & Calcul"
+    },
+    "name": {
+      "en": "Colab: Nemotron Fine-Tuning",
+      "fr": "Colab : Fine-Tuning Nemotron"
+    },
+    "description": {
+      "en": "Google Colab workspace for fine-tuning Nemotron 3.5 ASR on Wolof audio datasets.",
+      "fr": "Espace de travail Google Colab pour l'entraînement de Nemotron 3.5 ASR sur les données Wolof."
+    },
+    "url": "https://colab.research.google.com/",
+    "service": "colab"
+  },
+  {
+    "id": "modal-labs",
+    "category": {
+      "en": "Notebooks & Compute",
+      "fr": "Calepins & Calcul"
+    },
+    "name": {
+      "en": "Modal: GPU Pipeline runner",
+      "fr": "Modal : Exécuteur GPU"
+    },
+    "description": {
+      "en": "Serverless GPU functions to execute batch transcription and run low-latency MarianMT translations.",
+      "fr": "Fonctions GPU serverless pour exécuter des transcriptions par lots et des traductions MarianMT."
+    },
+    "url": "https://modal.com/",
+    "service": "modal"
+  },
+  {
+    "id": "hugging-face",
+    "category": {
+      "en": "Model Registries",
+      "fr": "Registres de Modèles"
+    },
+    "name": {
+      "en": "Hugging Face Spaces",
+      "fr": "Hugging Face Spaces"
+    },
+    "description": {
+      "en": "Deployment hub for MOSS-TTS-Nano-100M and Wolof-NMT translator demos.",
+      "fr": "Hub de déploiement pour les démonstrations de MOSS-TTS-Nano-100M et Wolof-NMT."
+    },
+    "url": "https://huggingface.co/OpenMOSS-Team/MOSS-TTS-Nano-100M",
+    "service": "huggingface"
+  },
+  {
+    "id": "supabase",
+    "category": {
+      "en": "Data & Storage",
+      "fr": "Données & Stockage"
+    },
+    "name": {
+      "en": "Supabase Control Panel",
+      "fr": "Panneau de Contrôle Supabase"
+    },
+    "description": {
+      "en": "Database dashboard storing vocabulary mapping caches, text transcripts, and user preferences.",
+      "fr": "Base de données stockant les caches de vocabulaire, les transcriptions et les préférences."
+    },
+    "url": "https://supabase.com/",
+    "service": "supabase"
+  },
+  {
+    "id": "google-sheets",
+    "category": {
+      "en": "Data & Storage",
+      "fr": "Données & Stockage"
+    },
+    "name": {
+      "en": "Google Sheets: Translation Cache",
+      "fr": "Google Sheets : Cache Traduction"
+    },
+    "description": {
+      "en": "Collaborative dictionary sheets for curating immediate high-frequency Wolof-to-French word matches.",
+      "fr": "Feuille collaborative pour éditer les correspondances rapides de mots Wolof-Français."
+    },
+    "url": "https://docs.google.com/spreadsheets/",
+    "service": "sheets"
+  },
+  {
+    "id": "data-pipeline",
+    "category": {
+      "en": "Data & Storage",
+      "fr": "Données & Stockage"
+    },
+    "name": {
+      "en": "Apache Airflow Pipeline",
+      "fr": "Pipeline Apache Airflow"
+    },
+    "description": {
+      "en": "Orchestrates speech-to-text data ingestion, dataset alignment, and automated model evaluations.",
+      "fr": "Orchestre l'ingestion de la parole, l'alignement des données et les évaluations automatiques."
+    },
+    "url": "https://airflow.apache.org/",
+    "service": "airflow"
+  }
+]

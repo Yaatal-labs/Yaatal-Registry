@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YAATAL — Livestream Lane: Caption vs Dub</title>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kick"><span class="d"></span> Livestream Lane · Caption vs Dub · June 2026</div>
+  <h1>The livestream lane<br>is <em>two products.</em></h1>
+  <p class="lede">Yesterday's Nemotron 3.5 ASR drop shifts the livestream lane toward a cascade and away from the Hibiki dependency — for most of what you'd actually ship. But "caption" and "dub" want different things, and only one is fully de-risked.</p>
+  <p class="stamp">Nemotron 3.5 ASR = speech→text transcription (40 locales). It does NOT translate or speak. It's a component, not a Hibiki replacement.</p>
+
+  <hr>
+
+  <!-- REFRAME -->
+  <div class="reframe">
+    <div class="l"><span class="a">Caption lane</span> → ASR + MT cascade. <span class="a">De-risked — build this.</span><small>Every component exists. Sidesteps the entire Hibiki data/feasibility wall.</small></div>
+    <div class="l"><span class="b">Dub lane</span> → cascade + TTS, OR Hibiki. <span class="b">A latency-vs-feasibility tradeoff.</span><small>Cascade now more attractive: all parts exist, Hibiki's Wolof adaptation is doubtful.</small></div>
+  </div>
+
+  <hr>
+
+  <!-- TWO PRODUCTS -->
+  <h2>The two sub-products</h2>
+  <p class="sec-note">Same input (a live Wolof stream), different output. The output choice decides the architecture and the remaining gate.</p>
+
+  <div class="prods">
+
+    <!-- CAPTION -->
+    <div class="prod cap">
+      <div class="prod-head">
+        <span class="tag">Output: text on screen</span>
+        <h3>Caption / Subtitle</h3>
+        <div class="sub">Translated text captions over the stream. Wolof speech → French (or Wolof) text.</div>
+        <span class="status derisk">✓ de-risked · build this</span>
+      </div>
+      <div class="prod-body">
+        <div class="pipe">
+          <div class="pstep asr"><div class="dot">1</div><div class="txt"><b>Streaming ASR</b> — Wolof speech → text<br><span class="tool"><a href="https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b">Nemotron 3.5 ASR</a> · 80–320ms · punctuated · auto-detect</span></div></div>
+          <div class="pstep mt"><div class="dot">2</div><div class="txt"><b>MT</b> — Wolof text → French text<br><span class="tool"><a href="https://github.com/Galsenaicommunity/Wolof-NMT">Wolof-NMT</a> (NLLB) · MIT · bidirectional</span></div></div>
+        </div>
+        <div class="gate-line">
+          <span class="lbl">remaining gate</span>
+          <b>Wolof is a new-language bootstrap for the ASR</b> (not in the 40 locales). The ASR leg must be fine-tuned on galsenai Wolof audio first — same gate as the edge-ASR eval. Once that clears, the lane is pure composition.
+        </div>
+      </div>
+    </div>
+
+    <!-- DUB -->
+    <div class="prod dub">
+      <div class="prod-head">
+        <span class="tag">Output: voiced speech</span>
+        <h3>Dub / Voiced</h3>
+        <div class="sub">French speech over the stream. For users who can't read captions — the low-literacy reality.</div>
+        <span class="status trade">⚖ tradeoff · cascade or Hibiki</span>
+      </div>
+      <div class="prod-body">
+        <div class="pipe">
+          <div class="pstep asr"><div class="dot">1</div><div class="txt"><b>Streaming ASR</b> → text<br><span class="tool">Nemotron 3.5 ASR</span></div></div>
+          <div class="pstep mt"><div class="dot">2</div><div class="txt"><b>MT</b> → French text<br><span class="tool">Wolof-NMT</span></div></div>
+          <div class="pstep tts"><div class="dot">3</div><div class="txt"><b>Streaming TTS</b> → French speech<br><span class="tool">streaming French TTS — component TBD</span></div></div>
+        </div>
+        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);margin:4px 0 14px">— or, monolithic —</div>
+        <div class="pipe">
+          <div class="pstep s2s"><div class="dot">H</div><div class="txt"><b>Hibiki S2ST</b> — Wolof audio → French audio, one model<br><span class="tool">lower latency · but research-risk + data wall</span></div></div>
+        </div>
+        <div class="gate-line">
+          <span class="lbl">remaining gate</span>
+          <b>Two gates:</b> the ASR bootstrap (as above) PLUS the TTS-out stage. Cascade adds ASR→MT→TTS latency stack; Hibiki is lower-latency audio→audio but is the research-risk track (Kyutai's own new-language-adaptation doubt, stereo+sidecar data wall).
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <!-- WHY NEMOTRON IS MORE TAILORED -->
+  <h2>Why Nemotron 3.5 ASR is more tailored than Hibiki — for the ASR leg</h2>
+  <p class="sec-note">Your instinct, made concrete. Hibiki is built for monolithic dubbing; this is built for captioning + the ASR leg of translation — exactly the de-risked half.</p>
+  <div class="why">
+    <div class="w"><div class="h">Captioning is a listed use case</div><p>NVIDIA built it for "live multilingual meeting captions" and "real-time captioning + translation for livestreams and events." Hibiki is built for dubbing; this is built for the captioning job.</p></div>
+    <div class="w"><div class="h">Auto language-detect fits broadcast reality</div><p>target_lang=auto handles a Dakar speaker code-switching Wolof↔French mid-sentence — the "known language assumption" problem. Hibiki assumes a fixed source.</p></div>
+    <div class="w"><div class="h">Latency knob is broadcast-tunable</div><p>att_context_size spans 80ms→1.12s on one checkpoint — captioning at 320ms, voice agent at 80ms, same model. Hibiki gives one profile.</p></div>
+    <div class="w"><div class="h">Punctuation native</div><p>Production-ready cased, punctuated text — the difference between readable captions and a lowercase wall. Out of scope for Hibiki (it outputs speech).</p></div>
+    <div class="w"><div class="h">In-family + the SALM-Duplex encoder</div><p>Same FastConformer the duplex recipe wants for its encoder slot. One component serves captioning AND the duplex tier. Coherent lineage with the Nemotron backbone.</p></div>
+  </div>
+
+  <hr>
+
+  <!-- HIBIKI POSITION -->
+  <h2>Where this leaves Hibiki</h2>
+  <div class="hib">
+    <h3>Hibiki shrinks from "dependency" to "optional, later, narrow"</h3>
+    <p>Before yesterday: the livestream lane <b>depended</b> on solving Hibiki (research-risk, data wall). After: most of what you'd ship — captioning + text-translation — is a <b>cascade of pieces that all exist</b>, no Hibiki needed.</p>
+    <p>Hibiki's remaining niche: <b>only if voiced dubbing latency proves insufficient via the cascade.</b> Monolithic audio→audio S2ST has a genuine latency argument the ASR→MT→TTS stack can't fully match. But that's a much smaller, later, optional bet than "the lane depends on Hibiki."</p>
+    <p>[Inference] Net: yesterday's drop moves the livestream lane toward the cascade and demotes Hibiki to a contingency for one sub-case.</p>
+  </div>
+
+  <hr>
+
+  <!-- THE USER QUESTION -->
+  <h2>The question that decides it</h2>
+  <div class="uq">
+    <h3>Does the livestream lane need voice out — and for whom?</h3>
+    <p>For <b>low-literacy users</b>, captions may be the wrong output entirely — they can't read them — which pushes toward <b>voiced</b>, keeping a TTS-or-Hibiki question alive. For the <b>public-good translation layer</b> (schools, events, mixed-literacy audiences), captions + voice together is plausible.</p>
+    <p style="margin-top:8px">Which output the lane serves, and to whom, decides whether the Nemotron cascade <b>fully replaces</b> the Hibiki dependency or just <b>shrinks</b> it. The caption lane is buildable now; the dub lane's architecture hinges on this answer.</p>
+  </div>
+
+  <p class="end">
+    <b>REFRAME</b> &nbsp;livestream = two products: caption (de-risked cascade) + dub (cascade-or-Hibiki tradeoff)<br>
+    <b>CAPTION</b> &nbsp;Nemotron 3.5 ASR + Wolof-NMT · all components exist · gate = Wolof ASR bootstrap<br>
+    <b>DUB</b> &nbsp;cascade + streaming TTS, OR Hibiki monolithic · gate = ASR bootstrap + TTS-out / latency tradeoff<br>
+    <b>HIBIKI</b> &nbsp;demoted from dependency to optional contingency for voiced-dubbing latency only<br>
+    <b>FLAGS</b> &nbsp;Wolof not in the 40 locales (bootstrap case) · Nemotron 3.5 ASR license = OpenMDW-1.1 [verify] · streaming French TTS component still TBD
+  </p>
+
+</div>
+</body>
+</html>
