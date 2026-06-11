@@ -4,71 +4,71 @@ import { ArrowRight, Cpu, MessageSquare, Mic, Activity, FileText, Zap, Award } f
 const LANDING_T = {
   en: {
     heroTag: "Single Source of Truth",
-    heroTitleHtml: "YAATAL <em>Livestream Control Center</em>",
-    heroDesc: "The central repository for YAATAL real-time translation architecture, workflows, and edge latency optimization budgets.",
+    heroTitleHtml: "YAATAL <em>Control Center</em>",
+    heroDesc: "One umbrella — the SDK, the AI models, Commerce (BOBO) and Livestream/Translation lanes — removing West African language barriers so anyone can speak in their mother tongue and be understood in everyone else's. The main barrier is access and reach, not creativity, vision or talent.",
     exploreDocs: "Explore Documentation",
     viewWorkflows: "View Workflows & Tools",
-    
+
     // Features / pillars section
-    featuresTitle: "Core Architectural Pillars",
-    featCaptionTitle: "Caption / Subtitle Lane",
-    featCaptionDesc: "Low-latency streaming ASR cascade combined with neural machine translation to display subtitles on the broadcast stream.",
-    featDubTitle: "Dub / Audio Lane",
-    featDubDesc: "Synthesized edge-TTS voices tailored for low-literacy broadcast audiences, de-risking high-latency cascade vs monolithic models.",
-    featEdgeTitle: "Edge Processing",
-    featEdgeDesc: "Direct on-device CPU execution using local dictionary databases and ONNX WebAssembly-based translation models.",
+    featuresTitle: "One Umbrella, Two Product Lanes",
+    featCaptionTitle: "Commerce Lane (BOBO)",
+    featCaptionDesc: "Voice-first market commerce: an on-device model proposes the action, the sovereignty-typed Engine validates and executes. Be heard by the market in your tongue.",
+    featDubTitle: "Livestream Lane",
+    featDubDesc: "Real-time captions and audio dubbing for live broadcasts, with an auditable moderation seam between understanding and speech. Be understood live by everyone, each in theirs.",
+    featEdgeTitle: "Shared Substrate",
+    featEdgeDesc: "The Rust Engine, the data factory and native review pipeline, and license-first sovereign model choices — one foundation under both lanes.",
 
     // Stats section
-    statsTitle: "System Metrics & Live Status",
-    statASRLatency: "ASR Target Latency",
-    statASRLatencyVal: "80 - 320ms",
-    statMTLatency: "MT Target Latency",
-    statMTLatencyVal: "150ms",
-    statTTSLatency: "TTS Target Latency",
-    statTTSLatencyVal: "200ms",
-    statQuality: "Translation Quality",
-    statQualityVal: "94.2% BLEU",
+    statsTitle: "Live Program Metrics",
+    statASRLatency: "Market-Intent Dataset",
+    statASRLatencyVal: "6,022 rows",
+    statMTLatency: "Licensed Wolof Speech",
+    statMTLatencyVal: "~115 h",
+    statTTSLatency: "Guardrail Acceptance",
+    statTTSLatencyVal: "88.3%",
+    statQuality: "Edge Model (Q4 GGUF)",
+    statQualityVal: "901 MB",
 
     // Quick links / documents
     quickLinksTitle: "Essential Documentation",
-    welcomeDoc: "Welcome Guide",
-    welcomeDocDesc: "General overview of the YAATAL control center and platform features.",
+    welcomeDoc: "Welcome — The Umbrella",
+    welcomeDocDesc: "The mission, the four pillars, the two product lanes, and the shared substrate they stand on.",
     livestreamDoc: "Livestream Lane Specs",
-    livestreamDocDesc: "Deep dive comparison of ASR+MT cascade vs monolithic Hibiki speech-to-speech architectures."
+    livestreamDocDesc: "Deep dive comparison of ASR+MT cascade vs monolithic speech-to-speech architectures."
   },
   fr: {
     heroTag: "Source Unique de Vérité",
-    heroTitleHtml: "Centre de Contrôle <em>Livestream YAATAL</em>",
-    heroDesc: "Le répertoire central pour l'architecture de traduction en temps réel YAATAL, ses flux de travail et ses budgets d'optimisation de latence edge.",
+    heroTitleHtml: "Centre de Contrôle <em>YAATAL</em>",
+    heroDesc: "Une ombrelle — le SDK, les modèles d'IA, les voies Commerce (BOBO) et Livestream/Traduction — pour faire tomber les barrières de langues d'Afrique de l'Ouest : que chacun·e parle dans sa langue maternelle et soit compris·e dans celle de tous les autres. La barrière principale, c'est l'accès et la portée — pas la créativité, la vision ou le talent.",
     exploreDocs: "Explorer la Documentation",
     viewWorkflows: "Voir les Flux & Outils",
 
     // Features / piliers
-    featuresTitle: "Piliers Architecturaux Clés",
-    featCaptionTitle: "Voie Sous-titrage / Captions",
-    featCaptionDesc: "Cascade ASR en continu à faible latence combinée avec une traduction automatique neuronale pour afficher des sous-titres sur le flux.",
-    featDubTitle: "Voie Doublage / Audio",
-    featDubDesc: "Voix TTS synthétisées à l'edge pour les audiences à faible alphabétisation, évaluant le compromis cascade vs modèles monolithiques.",
-    featEdgeTitle: "Traitement à l'Edge",
-    featEdgeDesc: "Exécution directe sur le processeur de l'appareil à l'aide de dictionnaires locaux et de modèles de traduction ONNX via WebAssembly.",
+    featuresTitle: "Une Ombrelle, Deux Voies Produit",
+    featCaptionTitle: "Voie Commerce (BOBO)",
+    featCaptionDesc: "Commerce de marché à la voix : un modèle sur l'appareil propose l'action, l'Engine typé-souveraineté valide et exécute. Être entendu·e par le marché dans sa langue.",
+    featDubTitle: "Voie Livestream",
+    featDubDesc: "Sous-titres et doublage audio en temps réel pour les directs, avec une couture de modération auditable entre compréhension et parole. Être compris·e en direct par tous, chacun dans la sienne.",
+    featEdgeTitle: "Socle Commun",
+    featEdgeDesc: "L'Engine Rust, la fabrique de données et le pipeline de révision native, et des choix de modèles souverains licence-d'abord — une fondation sous les deux voies.",
 
     // Stats
-    statsTitle: "Métriques du Système & État",
-    statASRLatency: "Latence Cible ASR",
-    statASRLatencyVal: "80 - 320ms",
-    statMTLatency: "Latence Cible MT",
-    statMTLatencyVal: "150ms",
-    statTTSLatency: "Latence Cible TTS",
-    statTTSLatencyVal: "200ms",
-    statQuality: "Qualité de Traduction",
-    statQualityVal: "94.2% BLEU",
+    statsTitle: "Métriques du Programme",
+    statASRLatency: "Jeu Market-Intent",
+    statASRLatencyVal: "6 022 lignes",
+    statMTLatency: "Parole Wolof sous Licence",
+    statMTLatencyVal: "~115 h",
+    statTTSLatency: "Acceptation Garde-fou",
+    statTTSLatencyVal: "88,3 %",
+    statQuality: "Modèle Edge (GGUF Q4)",
+    statQualityVal: "901 Mo",
 
     // Liens rapides
     quickLinksTitle: "Documentation Essentielle",
-    welcomeDoc: "Guide de Bienvenue",
-    welcomeDocDesc: "Vue d'ensemble générale du centre de contrôle YAATAL et des fonctionnalités de la plateforme.",
+    welcomeDoc: "Bienvenue — L'Ombrelle",
+    welcomeDocDesc: "La mission, les quatre piliers, les deux voies produit, et le socle commun sur lequel elles reposent.",
     livestreamDoc: "Spécifications Voie Livestream",
-    livestreamDocDesc: "Comparatif approfondi entre la cascade ASR+MT et les architectures monolithiques Hibiki de parole à parole."
+    livestreamDocDesc: "Comparatif approfondi entre la cascade ASR+MT et les architectures monolithiques de parole à parole."
   }
 };
 

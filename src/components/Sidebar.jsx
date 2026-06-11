@@ -3,13 +3,13 @@ import { Home, Cpu, FileText, Search, X, Play, ChevronDown, ChevronRight, Folder
 
 const CATEGORY_LABELS = {
   en: {
-    architecture: "Architecture & Tech",
-    vision: "Vision & Roadmap",
+    commerce: "Commerce Lane (BOBO)",
+    livestream: "Livestream Lane",
     guides: "Guides & Onboarding"
   },
   fr: {
-    architecture: "Architecture & Technique",
-    vision: "Vision & Feuille de Route",
+    commerce: "Voie Commerce (BOBO)",
+    livestream: "Voie Livestream",
     guides: "Guides & Intégration"
   }
 };
@@ -28,8 +28,8 @@ function Sidebar({
   setSidebarOpen
 }) {
   const [collapsed, setCollapsed] = useState({
-    architecture: false,
-    vision: false,
+    commerce: false,
+    livestream: false,
     guides: false
   });
 
@@ -47,7 +47,7 @@ function Sidebar({
     return acc;
   }, {});
 
-  const categories = ['architecture', 'vision', 'guides'];
+  const categories = ['commerce', 'livestream', 'guides'];
 
   return (
     <>

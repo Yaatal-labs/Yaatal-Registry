@@ -47,7 +47,7 @@ function build() {
 
   const docs = [];
   const languages = ['en', 'fr'];
-  const categories = ['architecture', 'vision', 'guides'];
+  const categories = ['commerce', 'livestream', 'guides'];
 
   languages.forEach((lang) => {
     const langDir = path.join(DOCS_DIR, lang);
