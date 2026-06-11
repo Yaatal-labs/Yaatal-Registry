@@ -5,7 +5,7 @@ const LANDING_T = {
   en: {
     heroTag: "Single Source of Truth",
     heroTitleHtml: "YAATAL <em>Control Center</em>",
-    heroDesc: "One umbrella — the SDK, the AI models, Commerce (BOBO) and Livestream/Translation lanes — removing West African language barriers so anyone can speak in their mother tongue and be understood in everyone else's. The main barrier is access and reach, not creativity, vision or talent.",
+    heroDesc: "One umbrella: the SDK, the AI models, and the Commerce (BOBO) and Livestream/Translation lanes. The goal is to remove West African language barriers so anyone can speak in their mother tongue and be understood in everyone else's. The main barrier is access and reach, not creativity, vision or talent.",
     exploreDocs: "Explore Documentation",
     viewWorkflows: "View Workflows & Tools",
 
@@ -16,7 +16,7 @@ const LANDING_T = {
     featDubTitle: "Livestream Lane",
     featDubDesc: "Real-time captions and audio dubbing for live broadcasts, with an auditable moderation seam between understanding and speech. Be understood live by everyone, each in theirs.",
     featEdgeTitle: "Shared Substrate",
-    featEdgeDesc: "The Rust Engine, the data factory and native review pipeline, and license-first sovereign model choices — one foundation under both lanes.",
+    featEdgeDesc: "The Rust Engine, the data factory with its native review pipeline, and license-first sovereign model choices. One foundation under both lanes.",
 
     // Stats section
     statsTitle: "Live Program Metrics",
@@ -39,18 +39,18 @@ const LANDING_T = {
   fr: {
     heroTag: "Source Unique de Vérité",
     heroTitleHtml: "Centre de Contrôle <em>YAATAL</em>",
-    heroDesc: "Une ombrelle — le SDK, les modèles d'IA, les voies Commerce (BOBO) et Livestream/Traduction — pour faire tomber les barrières de langues d'Afrique de l'Ouest : que chacun·e parle dans sa langue maternelle et soit compris·e dans celle de tous les autres. La barrière principale, c'est l'accès et la portée — pas la créativité, la vision ou le talent.",
+    heroDesc: "Une ombrelle : le SDK, les modèles d'IA, et les voies Commerce (BOBO) et Livestream/Traduction. Le but est de faire tomber les barrières de langues d'Afrique de l'Ouest, pour que chacun(e) parle dans sa langue maternelle et soit compris(e) dans celle de tous les autres. La barrière principale, c'est l'accès et la portée, pas la créativité, la vision ou le talent.",
     exploreDocs: "Explorer la Documentation",
     viewWorkflows: "Voir les Flux & Outils",
 
     // Features / piliers
     featuresTitle: "Une Ombrelle, Deux Voies Produit",
     featCaptionTitle: "Voie Commerce (BOBO)",
-    featCaptionDesc: "Commerce de marché à la voix : un modèle sur l'appareil propose l'action, l'Engine typé-souveraineté valide et exécute. Être entendu·e par le marché dans sa langue.",
+    featCaptionDesc: "Commerce de marché à la voix : un modèle sur l'appareil propose l'action, l'Engine typé-souveraineté valide et exécute. Être entendu(e) par le marché dans sa langue.",
     featDubTitle: "Voie Livestream",
-    featDubDesc: "Sous-titres et doublage audio en temps réel pour les directs, avec une couture de modération auditable entre compréhension et parole. Être compris·e en direct par tous, chacun dans la sienne.",
+    featDubDesc: "Sous-titres et doublage audio en temps réel pour les directs, avec une couture de modération auditable entre compréhension et parole. Être compris(e) en direct par tous, chacun dans la sienne.",
     featEdgeTitle: "Socle Commun",
-    featEdgeDesc: "L'Engine Rust, la fabrique de données et le pipeline de révision native, et des choix de modèles souverains licence-d'abord — une fondation sous les deux voies.",
+    featEdgeDesc: "L'Engine Rust, la fabrique de données avec son pipeline de révision native, et des choix de modèles souverains licence-d'abord. Une fondation sous les deux voies.",
 
     // Stats
     statsTitle: "Métriques du Programme",

@@ -60,6 +60,33 @@ function App() {
     localStorage.setItem('lang', lang);
   }, [lang]);
 
+  // Hash deep links: #/doc/<slug>, #/workflows, #/playground, #/ (landing).
+  // Markdown links inside docs (e.g. [text](#/doc/commerce-overview)) navigate via hashchange.
+  useEffect(() => {
+    const applyHash = () => {
+      const h = window.location.hash.replace(/^#\/?/, '');
+      if (h.startsWith('doc/')) {
+        setActiveDocSlug(decodeURIComponent(h.slice(4)));
+        setView('docs');
+      } else if (h === 'workflows' || h === 'playground') {
+        setView(h);
+      } else if (h === '') {
+        setView('landing');
+      }
+    };
+    applyHash();
+    window.addEventListener('hashchange', applyHash);
+    return () => window.removeEventListener('hashchange', applyHash);
+  }, []);
+
+  // Keep the URL shareable as the user navigates (replaceState: no history spam, no hashchange loop).
+  useEffect(() => {
+    const target = view === 'docs' ? `#/doc/${activeDocSlug}` : view === 'landing' ? '#/' : `#/${view}`;
+    if (window.location.hash !== target) {
+      window.history.replaceState(null, '', target);
+    }
+  }, [view, activeDocSlug]);
+
   useEffect(() => {
     localStorage.setItem('theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
