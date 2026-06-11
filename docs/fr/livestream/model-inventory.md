@@ -2,15 +2,23 @@
 
 Ce document présente les détails d'architecture, l'empreinte de ressources, les liens et les configurations de déploiement optionnelles pour l'écosystème de traduction parole-à-parole en temps réel de YAATAL.
 
+> **Passe de vérification du 2026-06-11.** Chaque entrée porte désormais un tag de statut :
+> ✅ vérifié sur Hugging Face avec licence propre · ⚠️ utilisable avec une réserve nommée ·
+> ❌ référence de recherche uniquement (aucun checkpoint publié).
+> Règle de promotion : un candidat n'entre dans la pile décidée que lorsqu'un pipeline le consomme
+> réellement et que sa chaîne de licence est propre. La même règle s'applique aux données (voir la
+> page Pipeline de données).
+
 ---
 
 ## 1. Matrice des Modèles & Ressources Directes
 
 ### 🎙️ Étape 1 : Reconnaissance Automatique de la Parole (ASR)
 
-#### **Nemotron 3.5 ASR (Streaming 0.6B)**
-*   **Architecture** : Encodeur FastConformer avec décodeur CTC. Utilise des fenêtres d'attention sélectives.
+#### **Nemotron 3.5 ASR (Streaming 0.6B)** ✅ vérifié · OpenMDW-1.1 (sans plafond)
+*   **Architecture** : Cache-Aware FastConformer avec décodeur **RNNT** (selon la fiche modèle). Utilise des fenêtres d'attention sélectives.
 *   **Taille des Paramètres** : ~600 Millions
+*   **Statut Wolof** : absent de ses ~40 locales ; nécessite l'adaptation basse-ressource décrite dans `SALM-ON-GRANITE-350M.md` (corpus Wolof-ASR-Data de 97,9 h)
 *   **Empreinte Mémoire** : ~1,2 Go de RAM (poids statiques) + KV-cache dynamique (complexité spatiale en $O(L)$, où $L$ est la longueur du contexte).
 *   **Entrée/Sortie** : Flux audio brut $\rightarrow$ texte ponctué et cased.
 *   **Usage Principal** : Transcription en direct haute fidélité.
@@ -19,7 +27,7 @@ Ce document présente les détails d'architecture, l'empreinte de ressources, le
     *   **Inférence** : [Fiche Modèle Hugging Face](https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b)
     *   **Référence d'Architecture** : [Publication FastConformer Speech (arXiv)](https://arxiv.org/abs/2305.05077)
 
-#### **Samba-ASR / AuM (Audio Mamba)**
+#### **Samba-ASR / AuM (Audio Mamba)** ❌ référence de recherche — aucun checkpoint publié (vérifié 2026-06-11)
 *   **Architecture** : Blocs Structured State Space Model (SSM / Mamba-2) remplaçant l'attention classique.
 *   **Taille des Paramètres** : ~50 Millions - 120 Millions
 *   **Empreinte Mémoire** : **~200 Mo de RAM (statique)**. Espace d'état récurrent constant (complexité spatiale en $O(1)$).
@@ -34,13 +42,25 @@ Ce document présente les détails d'architecture, l'empreinte de ressources, le
 
 ### 🔀 Étape 2 : Traduction Automatique (MT)
 
-#### **Wolof-NMT (NLLB-200 Distilled 600M)**
+#### **MADLAD-400-3B-MT** ✅ vérifié · Apache-2.0 — candidat principal
+*   **Architecture** : Encoder-decoder T5 entraîné sur MADLAD-400.
+*   **Taille des Paramètres** : ~3 Milliards (des variantes 7B et 10B existent comme échelle de qualité).
+*   **Couverture linguistique** : inclut nativement **le wolof (`wo`), le bambara (`bm`), le peul (`ff`), le sérère (`srr`), le dioula (`dyu`), le haoussa (`ha`)** parmi plus de 400 langues : la liste atlantique que vise cette voie.
+*   **Usage Principal** : couture de traduction côté serveur et génération de texte cible synthétique ; le remplaçant à licence propre de NLLB dans les deux rôles.
+*   **Déploiement** : des builds GGUF existent ; le serving CTranslate2 est éprouvé en communauté.
+*   **Ressources & Liens** : [google/madlad400-3b-mt (Hugging Face)](https://huggingface.co/google/madlad400-3b-mt)
+
+#### **M2M100-418M** ✅ vérifié · MIT — petite option propre
+*   **Architecture** : Transformer many-to-many, inclut `wo`.
+*   **Taille des Paramètres** : ~418 Millions.
+*   **Usage Principal** : MT à petite empreinte, affiné sur les ~116 k paires FR↔WO de l'inventaire de données ; plus tard élève de distillation de MADLAD.
+*   **Ressources & Liens** : [facebook/m2m100_418M (Hugging Face)](https://huggingface.co/facebook/m2m100_418M)
+
+#### **Wolof-NMT (NLLB-200 Distilled 600M)** ⚠️ référence / R&D — poids NC
 *   **Architecture** : Transformer Encoder-Decoder dense.
 *   **Taille des Paramètres** : ~615 Millions
-*   **Empreinte Mémoire** : ~1,3 Go de RAM.
-*   **Entrée/Sortie** : Texte Wolof $\rightarrow$ texte Français.
-*   **Usage Principal** : Traduction de niveau production.
-*   **Usage Optionnel** : Peut être hébergé sans serveur (Inference Endpoints Hugging Face) et requêté par n8n pour les tâches de fond.
+*   **Réserve** : le wrapper GalsenAI est MIT, mais les **poids NLLB-200 sous-jacents sont CC-BY-NC** : très bien comme référence R&D et étalon de qualité, pas pour la livraison. MADLAD-400 (ci-dessus) couvre ses deux rôles avec une licence propre.
+*   **Usage Principal** : étalon d'évaluation ; moteur historique des paires FR↔WO synthétiques.
 *   **Ressources & Liens** :
     *   **Code Source** : [Dépôt GitHub Wolof-NMT](https://github.com/Galsenaicommunity/Wolof-NMT)
     *   **Modèle de Base** : [Meta NLLB-200 (Hugging Face)](https://huggingface.co/facebook/nllb-200-distilled-600m)
@@ -55,27 +75,21 @@ Ce document présente les détails d'architecture, l'empreinte de ressources, le
 *   **Ressources & Liens** :
     *   **Moteur d'Inférence Wasm** : [ONNX Runtime Web](https://onnxruntime.ai/docs/tutorials/web/)
 
-#### **Modèle de Traduction Mamba-2**
-*   **Architecture** : Traducteur séquentiel récurrent State Space.
-*   **Taille des Paramètres** : ~100 Millions
-*   **Empreinte Mémoire** : ~200 Mo de RAM.
-*   **Entrée/Sortie** : Tokens Wolof $\rightarrow$ tokens Français.
-*   **Usage Principal** : Traduction récurrente en temps linéaire à latence constante.
-*   **Usage Optionnel** : Traduction en continu flux de tokens par tokens (traduit au fur et à mesure que la personne parle).
-*   **Ressources & Liens** :
-    *   **Code Source** : [Dépôt GitHub Mamba (state-spaces/mamba)](https://github.com/state-spaces/mamba)
+#### **Modèle de Traduction Mamba-2** ❌ concept — aucun checkpoint n'existe (vérifié 2026-06-11)
+*   **Idée** : un traducteur récurrent state-space à latence constante, token par token. Rien de publié n'y correspond ; cela reste un cap de conception. Si un tel modèle apparaît (ou si nous en distillons un), il prendra cette place.
+*   **Ressources & Liens** : [state-spaces/mamba (GitHub)](https://github.com/state-spaces/mamba) (framework uniquement)
 
 ---
 
 ### 🔊 Étape 3 : Synthèse Vocale (TTS)
 
-#### **MOSS-TTS-Nano-100M**
-*   **Architecture** : Tokeniseur Audio Autoregressif + Décodeur LLM léger.
+#### **MOSS-TTS-Nano-100M** ✅ vérifié · Apache-2.0 (avec une réserve)
+*   **Architecture** : Tokeniseur Audio Autoregressif + Décodeur LLM léger (`moss_tts_nano`, `custom_code`).
 *   **Taille des Paramètres** : ~100 Millions
 *   **Empreinte Mémoire** : ~220 Mo de RAM.
-*   **Entrée/Sortie** : Texte Français $\rightarrow$ forme d'onde audio 48kHz.
+*   **Entrée/Sortie** : Texte Français $\rightarrow$ forme d'onde audio 48kHz. 20 langues sur la fiche (français oui, **pas de wolof** : le doublage wolof reste sur `galsenai/xTTS-v2-wolof` ou de futurs affinages).
 *   **Usage Principal** : Doublage vocal français haute fidélité.
-*   **Usage Optionnel** : Exportable vers ONNX pour s'exécuter localement sur des processeurs CPU standards.
+*   **Réserve** : livré en `custom_code` (pas de voie llama.cpp) ; l'export ONNX annoncé doit être vérifié avant que la configuration « pur edge » ne s'y appuie.
 *   **Ressources & Liens** :
     *   **Inférence** : [OpenMOSS-Team/MOSS-TTS-Nano-100M (Hugging Face)](https://huggingface.co/OpenMOSS-Team/MOSS-TTS-Nano-100M)
     *   **Dépôt GitHub** : [OpenMOSS/MOSS-TTS-Nano](https://github.com/OpenMOSS/MOSS-TTS-Nano)
@@ -87,6 +101,20 @@ Ce document présente les détails d'architecture, l'empreinte de ressources, le
 *   **Entrée/Sortie** : Mel-spectrogramme/tokens audio $\rightarrow$ audio brut.
 *   **Usage Principal** : Synthèse de forme d'onde à très faible latence.
 *   **Usage Optionnel** : S'intègre dans un pipeline de synthèse mobile pour s'exécuter sur le CPU du client avec des temps de calcul inférieurs à la milliseconde.
+
+---
+
+### 🧠 Étape 4 : Backbone LLM / Agent Duplex — partagé avec la voie Commerce
+
+#### **Granite 4.0 H (350M / 1B)** ✅ vérifié · Apache-2.0
+*   **Architecture** : hybride dense Mamba2 + attention (`granitehybrid`), function-calling natif.
+*   **Rôle ici** : le backbone LLM de la **composition SALM-Duplex**, l'agent de traduction duplex
+    interactif que décrit le Plan Atlantique de cette voie. Le même backbone sert l'agent vocal de
+    la voie Commerce : une famille de modèles, une chaîne de licence, les deux voies.
+*   **Statut** : le 1B est qualifié (bake-off à l'échelle smoke, 2026-06-10) ; le 350M est le
+    candidat edge agressif (~210 Mo en Q4), en attente de son smoke LoRA. Composition complète et
+    plan de construction : `SALM-ON-GRANITE-350M.md` dans le dépôt Engine.
+*   **Ressources & Liens** : [granite-4.0-h-350m](https://huggingface.co/ibm-granite/granite-4.0-h-350m) · [granite-4.0-h-1b](https://huggingface.co/ibm-granite/granite-4.0-h-1b)
 
 ---
 
