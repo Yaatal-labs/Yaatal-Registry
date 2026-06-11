@@ -1,4 +1,4 @@
-# YAATAL Control Center — Bilingual Docs & Workflows SSOT
+# YAATAL Control Center Bilingual Docs & Workflows SSOT
 
 YAATAL is a high-performance, edge-optimized live translation portal designed to connect speech and text across languages in real-time. This application serves as the central **Single Source of Truth (SSOT)** for our architectural blueprints, external workflow hubs, and latency budgets.
 
