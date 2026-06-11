@@ -47,6 +47,7 @@ function build() {
 
   const docs = [];
   const languages = ['en', 'fr'];
+  const categories = ['architecture', 'vision', 'guides'];
 
   languages.forEach((lang) => {
     const langDir = path.join(DOCS_DIR, lang);
@@ -55,28 +56,34 @@ function build() {
       return;
     }
 
-    const files = fs.readdirSync(langDir);
-    files.forEach((file) => {
-      const ext = path.extname(file).toLowerCase();
-      if (ext !== '.html' && ext !== '.md') return;
+    categories.forEach((cat) => {
+      const catDir = path.join(langDir, cat);
+      if (!fs.existsSync(catDir)) return;
 
-      const slug = path.basename(file, ext);
-      const filePath = path.join(langDir, file);
-      const fileContent = fs.readFileSync(filePath, 'utf-8');
+      const files = fs.readdirSync(catDir);
+      files.forEach((file) => {
+        const ext = path.extname(file).toLowerCase();
+        if (ext !== '.html' && ext !== '.md') return;
 
-      let parsed;
-      if (ext === '.html') {
-        parsed = parseHtml(fileContent);
-      } else {
-        parsed = parseMarkdown(fileContent);
-      }
+        const slug = path.basename(file, ext);
+        const filePath = path.join(catDir, file);
+        const fileContent = fs.readFileSync(filePath, 'utf-8');
 
-      docs.push({
-        slug,
-        format: ext === '.html' ? 'html' : 'md',
-        lang,
-        title: parsed.title,
-        content: parsed.bodyContent
+        let parsed;
+        if (ext === '.html') {
+          parsed = parseHtml(fileContent);
+        } else {
+          parsed = parseMarkdown(fileContent);
+        }
+
+        docs.push({
+          slug,
+          format: ext === '.html' ? 'html' : 'md',
+          lang,
+          category: cat,
+          title: parsed.title,
+          content: parsed.bodyContent
+        });
       });
     });
   });

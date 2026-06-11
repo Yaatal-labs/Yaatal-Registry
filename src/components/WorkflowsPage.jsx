@@ -25,6 +25,7 @@ const WORKFLOWS_T = {
     presetNemotron: "Nemotron Cascade (Edge/Fast)",
     presetStandard: "Standard Broadcast Cascade",
     presetMonolithic: "Monolithic S2ST (Hibiki)",
+    presetMamba: "Mamba-2 SSM (Edge/Recurrent)",
     
     sliderASR: "ASR Leg Latency",
     sliderASRSub: "Speech-to-Text translation",
@@ -63,6 +64,7 @@ const WORKFLOWS_T = {
     presetNemotron: "Cascade Nemotron (Edge/Rapide)",
     presetStandard: "Cascade standard de diffusion",
     presetMonolithic: "S2ST Monolithique (Hibiki)",
+    presetMamba: "Mamba-2 SSM (Edge/Récurrent)",
     
     sliderASR: "Latence de l'étape ASR",
     sliderASRSub: "Transcription parole vers texte",
@@ -176,6 +178,18 @@ function WorkflowsPage({ workflows, t: globalT, lang }) {
             {lt.presetStandard}
           </button>
           <button 
+            className={`btn btn-secondary ${mode === 'cascade' && asr === 40 && mt === 15 && tts === 90 ? 'btn-primary' : ''}`}
+            onClick={() => {
+              setMode('cascade');
+              setAsr(40);
+              setMt(15);
+              setTts(90);
+            }}
+            style={{ padding: '6px 12px', fontSize: '12.5px', font: 'inherit' }}
+          >
+            {lt.presetMamba}
+          </button>
+          <button 
             className={`btn btn-secondary ${mode === 'monolithic' && monolithicLatency === 120 ? 'btn-primary' : ''}`}
             onClick={() => {
               setMode('monolithic');
@@ -199,7 +213,7 @@ function WorkflowsPage({ workflows, t: globalT, lang }) {
                 </div>
                 <input 
                   type="range" 
-                  min="80" 
+                  min="30" 
                   max="1200" 
                   step="10"
                   value={asr} 
@@ -217,7 +231,7 @@ function WorkflowsPage({ workflows, t: globalT, lang }) {
                 </div>
                 <input 
                   type="range" 
-                  min="20" 
+                  min="10" 
                   max="500" 
                   step="5"
                   value={mt} 
@@ -235,7 +249,7 @@ function WorkflowsPage({ workflows, t: globalT, lang }) {
                 </div>
                 <input 
                   type="range" 
-                  min="50" 
+                  min="30" 
                   max="1000" 
                   step="10"
                   value={tts} 
