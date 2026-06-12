@@ -1,0 +1,22 @@
+{
+  "status": "training",
+  "trainedOn": null,
+  "clips": [],
+  "stack": [
+    { "id": "ears", "model": "NeMo Wolof ASR encoder", "params": "~600M", "size": "~300 MB", "license": "Apache-2.0", "state": "planned" },
+    { "id": "brain", "model": "Granite 4.0-H 350M + tool-router LoRA", "params": "350M", "size": "210 MB (Q4)", "license": "Apache-2.0", "state": "qualified" },
+    { "id": "mouth", "model": "MOSS-TTS-Nano Wolof SFT", "params": "100M", "size": "~200 MB", "license": "Apache-2.0", "state": "training" }
+  ],
+  "brainMetrics": { "slot_f1": 0.846, "intent_accuracy": 0.993, "json_validity": 1.0 },
+  "sampleTurn": {
+    "user": "Waaw Fatou, wax yu Holland, weex ak bleu, pour mariaje, je cherche vitfé waxla",
+    "intent": {
+      "tool": "search_products",
+      "domain": "textiles",
+      "language": "wo-fr",
+      "entities": { "product": "wax hollandais", "colors": ["weex (blanc)", "bleu"], "occasion": "mariage", "urgency": "haute" },
+      "confidence": 0.93
+    },
+    "reply_wo": "Waaw, ma seet wax yu Holland yu weex ak bleu ngir mariaje bi. Xaaral tuuti..."
+  }
+}

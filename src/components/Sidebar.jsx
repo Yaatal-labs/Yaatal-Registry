@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Cpu, FileText, Search, X, Play, ChevronDown, ChevronRight, Folder } from 'lucide-react';
+import { Home, Cpu, FileText, Search, X, Play, ChevronDown, ChevronRight, Folder, Mic } from 'lucide-react';
 
 const CATEGORY_LABELS = {
   en: {
@@ -176,6 +176,15 @@ function Sidebar({
           >
             <Play size={16} />
             <span>{t.playground}</span>
+          </button>
+
+          <button
+            className={`nav-item ${view === 'voicelab' ? 'active' : ''}`}
+            onClick={() => setView('voicelab')}
+            style={{ width: '100%', border: 'none', background: 'none', textAlign: 'left', font: 'inherit' }}
+          >
+            <Mic size={16} />
+            <span>{t.voicelab}</span>
           </button>
 
           {/* Documentation list */}

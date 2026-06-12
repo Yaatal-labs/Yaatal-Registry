@@ -6,6 +6,7 @@ import DocViewer from './components/DocViewer';
 import LandingPage from './components/LandingPage';
 import WorkflowsPage from './components/WorkflowsPage';
 import Playground from './components/Playground';
+import VoiceLab from './components/VoiceLab';
 import { supabase, hasSupabaseConfig } from './supabase';
 import { Menu, Moon, Sun, Globe, ArrowLeft } from 'lucide-react';
 
@@ -18,6 +19,7 @@ const TRANSLATIONS = {
     docs: "Documentation",
     landing: "Home",
     playground: "Model Playground",
+    voicelab: "Voice Lab (Wolof)",
     themeLight: "Light Paper",
     themeDark: "Sleek Charcoal",
     menu: "Menu",
@@ -34,6 +36,7 @@ const TRANSLATIONS = {
     docs: "Documentation",
     landing: "Accueil",
     playground: "Playground Modèle",
+    voicelab: "Voice Lab (Wolof)",
     themeLight: "Papier Classique",
     themeDark: "Charbon Élégant",
     menu: "Menu",
@@ -68,7 +71,7 @@ function App() {
       if (h.startsWith('doc/')) {
         setActiveDocSlug(decodeURIComponent(h.slice(4)));
         setView('docs');
-      } else if (h === 'workflows' || h === 'playground') {
+      } else if (h === 'workflows' || h === 'playground' || h === 'voicelab') {
         setView(h);
       } else if (h === '') {
         setView('landing');
@@ -237,11 +240,14 @@ function App() {
               />
             )}
             {view === 'playground' && (
-              <Playground 
+              <Playground
                 lang={lang}
                 supabase={supabase}
                 hasSupabase={hasSupabaseConfig}
               />
+            )}
+            {view === 'voicelab' && (
+              <VoiceLab lang={lang} />
             )}
           </div>
         </main>
