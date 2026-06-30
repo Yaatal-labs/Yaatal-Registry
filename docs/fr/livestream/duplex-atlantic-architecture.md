@@ -1,5 +1,7 @@
 # Plan d'Architecture Duplex Atlantique YAATAL
 
+> **Statut (2026-06-30) :** reporté après le lancement (v2). La v1 repose sur un seul modèle omni embarqué (MiniMind-O), pas sur cette cascade. Ce schéma reste la conception de la future couche full-duplex / temps réel.
+
 Ce document définit le plan d'architecture à long terme pour un **Agent Vocal Interactif Duplex** léger, économe en données et respectueux de la batterie, traduisant entre les langues atlantiques d'Afrique de l'Ouest (Wolof, Bambara, Peul/Foula, Sérère, Arabe) et les langues internationales (Anglais, Français).
 
 ---

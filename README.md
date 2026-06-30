@@ -1,6 +1,6 @@
 # YAATAL Control Center Bilingual Docs & Workflows SSOT
 
-YAATAL is a high-performance, edge-optimized live translation portal designed to connect speech and text across languages in real-time. This application serves as the central **Single Source of Truth (SSOT)** for our architectural blueprints, external workflow hubs, and latency budgets.
+YAATAL removes the language and literacy barrier in West African commerce: people buy, sell, and go live in their mother tongue, by voice, whether or not they can read. This repository is the **Single Source of Truth (SSOT)** for the architecture, the data workflows, and the model registry, in English and French. One principle runs under all of it: **models propose, the Engine disposes.** The AI suggests; only a sovereignty-typed backend acts, and sensitive data stays in Senegal.
 
 ---
 
@@ -8,7 +8,7 @@ YAATAL is a high-performance, edge-optimized live translation portal designed to
 
 *   **Bilingual Docs Portal (EN / FR)**: Render static or database-driven documentation. Supports Markdown (via `marked`) and safe native HTML page embeds (preserving visual pipelines, reframes, and gate-line styling).
 *   **Workflows & Tools Launchpad**: Categorized control panel linking Google Sheets (translation caches), Google Colab & Modal (GPU training and pipelines), Hugging Face Spaces, Supabase DB panels, and Apache Airflow pipelines.
-*   **Interactive Latency Budget Calculator**: Adjust range sliders for ASR, MT, and TTS stages to calculate total delay and visualize proportional segment bars. Click presets to compare a **Nemotron Edge Cascade** against a **Monolithic S2ST (Hibiki)**.
+*   **Interactive Latency Budget Calculator**: Adjust range sliders for ASR, MT, and TTS stages to calculate total delay and visualize proportional segment bars. Presets compare an edge cascade against a single-model (monolithic) approach, the two paths explored for real-time translation.
 *   **Model Playground & Feedback Loop**: Live input sandbox querying Hugging Face translation models. Corrected translations can be submitted back to a Supabase database to trigger **n8n** dataset preparation workflows.
 *   **Hybrid Offline/Live Mode**: Automatically falls back to static JSON lists if Supabase connection details are missing, ensuring local testing never breaks.
 

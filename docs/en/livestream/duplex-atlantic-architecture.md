@@ -1,5 +1,7 @@
 # YAATAL Atlantic Duplex Architecture Blueprint
 
+> **Status (2026-06-30):** parked to post-launch (v2). v1 ships on a single on-device omni (MiniMind-O), not this cascade. This blueprint stays as the design for the later full-duplex / real-time tier.
+
 This document defines the long-term architectural blueprint for a lightweight, data-conscious, and battery-aware **Interactive Duplex Voice Agent** translating across West African Atlantic languages (Wolof, Bambara, Fula, Serer, Arabic) and international languages (English, French).
 
 ---

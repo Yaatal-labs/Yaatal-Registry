@@ -1,6 +1,24 @@
 # Inventaire des Modèles, Architectures & Configurations Hybrides YAATAL
 
-Ce document présente les détails d'architecture, l'empreinte de ressources, les liens et les configurations de déploiement optionnelles pour l'écosystème de traduction parole-à-parole en temps réel de YAATAL.
+Ce document est le registre des modèles de YAATAL : les modèles ASR, de traduction, de voix, d'intention et omni, pensés d'abord pour l'embarqué, derrière les lanes commerce et livestream. C'est un journal d'exploration vivant : il garde à la fois les choix les mieux adaptés aujourd'hui et les pistes explorées.
+
+## Dispositions actuelles (2026-06-30)
+
+Le tableau donne le choix le mieux adapté pour chaque rôle aujourd'hui. Les fiches détaillées plus bas gardent l'historique d'exploration, volontairement.
+
+| Rôle | Choix actuel | Statut |
+|---|---|---|
+| Reconnaissance vocale (ASR) | modèle interne, sur Bocalantics + Kallaama | en cours (issu du travail MOSS réorienté) ; publié en modèle ouvert autonome |
+| Intention / routeur d'outils | Granite-4.0-h-350m | décidé ; slot-F1 commerce 0,969 |
+| Traduction (texte) | MADLAD-400 | décidé ; un Atlantic-MT affiné suivra, publié |
+| Voix embarquée (entendre, parler, appeler un outil) | MiniMind-O (Apache) | actif ; voix wolof en entraînement |
+| Voix cloud | Qwen3-Omni-Instruct (Apache) | décidé |
+| Synthèse vocale (TTS) | la voie « parole » de l'omni | v1 ; une TTS wolof premium plus tard |
+| Vision / OCR | la voie « vision » de l'omni | v1 ; un OCR documentaire dédié seulement si besoin |
+| Traduction en temps réel | ouvert | la seule pièce difficile ; après le lancement (v2) |
+| Full-duplex S2ST (SALM) | en pause | après le lancement (v2) ; pas abandonné |
+
+Les fiches cascade plus bas (Nemotron ASR, Mamba-ASR, MOSS-TTS, le pipeline duplex) sont marquées **exploré** ou **en pause (v2)**. Elles ont nourri la conception actuelle ; elles ne sont pas la voie de la v1.
 
 > **Passe de vérification du 2026-06-11.** Chaque entrée porte désormais un tag de statut :
 > ✅ vérifié sur Hugging Face avec licence propre · ⚠️ utilisable avec une réserve nommée ·

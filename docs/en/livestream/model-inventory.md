@@ -1,6 +1,24 @@
 # YAATAL Model Inventory, Architecture & Hybrid Configurations
 
-This document outlines the detailed architectures, resource footprints, links, and optional deployment configurations for the YAATAL real-time speech-to-speech translation ecosystem.
+This document is the model registry for YAATAL: the edge-first ASR, translation, voice, intent, and omni models behind the commerce and livestream lanes. It is a living exploration log, so it keeps both the current best-fit calls and the paths we explored.
+
+## Current dispositions (2026-06-30)
+
+The table is the current best-fit call per role. The detailed entries below are kept on purpose as the exploration history.
+
+| Role | Current best-fit | Status |
+|---|---|---|
+| Speech recognition (ASR) | in-house, on Bocalantics + Kallaama | building (repurposed from the MOSS work); published as a standalone open model |
+| Intent / tool-router | Granite-4.0-h-350m | decided; commerce slot-F1 0.969 |
+| Translation (text) | MADLAD-400 | decided; a tuned Atlantic-MT follows, published |
+| Edge voice (hear, speak, tool-call) | MiniMind-O (Apache) | active; Wolof voice in training |
+| Cloud voice | Qwen3-Omni-Instruct (Apache) | decided |
+| Text-to-speech | the omni's speech lane | v1; a premium Wolof TTS is a later step |
+| Vision / OCR | the omni's vision lane | v1; a dedicated document OCR only if needed |
+| Real-time live translation | open | the one hard piece; post-launch (v2) |
+| Full-duplex S2ST (SALM) | parked | post-launch (v2); not abandoned |
+
+The cascade entries below (Nemotron ASR, Mamba-ASR, MOSS-TTS, the duplex pipeline) are tagged **explored** or **parked (v2)**. They shaped the current design; they are not the v1 path.
 
 > **Verification pass 2026-06-11.** Every entry now carries a status tag:
 > ✅ verified on Hugging Face with a clean license · ⚠️ usable with a named caveat ·
