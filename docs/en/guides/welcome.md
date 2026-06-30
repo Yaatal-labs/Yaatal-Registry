@@ -14,7 +14,7 @@ registries.
 | Pillar | What it is |
 |---|---|
 | **SDK** | the developer surface. Builders get the same reach we build for ourselves |
-| **AI Models** | the sovereign model program: edge-first ASR, translation, voice and intent for Atlantic languages |
+| **AI Models** | the sovereign model program: an edge-first omni (voice + intent), with ASR and translation, for Atlantic languages |
 | **Commerce (BOBO)** | product lane: *be heard by the market in your tongue* |
 | **Livestream / Translation** | product lane: *be understood live by everyone, each in theirs* |
 

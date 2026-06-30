@@ -15,7 +15,7 @@ registres de YAATAL.
 | Pilier | Ce que c'est |
 |---|---|
 | **SDK** | la surface développeur. Les bâtisseurs reçoivent la même portée que celle que nous construisons |
-| **Modèles d'IA** | le programme de modèles souverains : ASR, traduction, voix et intention, edge d'abord, pour les langues atlantiques |
+| **Modèles d'IA** | le programme de modèles souverains : un omni edge d'abord (voix + intention), avec ASR et traduction, pour les langues atlantiques |
 | **Commerce (BOBO)** | voie produit : *être entendu(e) par le marché dans sa langue* |
 | **Livestream / Traduction** | voie produit : *être compris(e) en direct par tous, chacun dans la sienne* |
 
