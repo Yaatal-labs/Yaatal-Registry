@@ -10,7 +10,9 @@ import {
   ExternalLink, 
   Zap, 
   Activity, 
-  Award 
+  Award,
+  Tag,
+  CheckSquare
 } from 'lucide-react';
 
 const WORKFLOWS_T = {
@@ -396,6 +398,7 @@ function WorkflowsPage({ workflows, t: globalT, lang }) {
                 else if (tool.service === 'huggingface') IconComponent = Layers;
                 else if (tool.service === 'supabase') IconComponent = Database;
                 else if (tool.service === 'airflow') IconComponent = RefreshCw;
+                else if (tool.service === 'label-studio') IconComponent = CheckSquare;
 
                 return (
                   <a 
