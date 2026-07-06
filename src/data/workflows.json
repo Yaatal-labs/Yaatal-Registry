@@ -13,7 +13,7 @@
       "en": "Human review interface for MADLAD back-translation pairs, audio intelligibility scoring, and speech translation alignment. Native speakers verify and correct Atlantic language translations.",
       "fr": "Interface de révision humaine pour les paires de traduction MADLAD, scoring d'intelligibilité audio, et alignement traduction vocale. Les locuteurs natifs vérifient et corrigent les traductions en langues atlantiques."
     },
-    "url": "http://213.136.80.242:8081",
+    "url": "https://label.njooba.com",
     "service": "label-studio"
   },
   {
