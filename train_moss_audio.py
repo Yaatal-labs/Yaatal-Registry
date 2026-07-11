@@ -2,7 +2,7 @@
 """
 Fine-tune MOSS-Audio-4B-Thinking on West African ASR datasets (Bocalantics + Kallaama).
 Uses LoRA/QLoRA for memory efficiency. Includes WER/CER evaluation per language.
-Runs on HF Jobs or locally.
+Supports Flash Attention 2, multi-GPU DDP (torchrun), and HF Jobs.
 """
 
 import os
@@ -132,20 +132,23 @@ class WerCerCallback(TrainerCallback):
                 )
             pred = self.processor.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
             ref = self.processor.tokenizer.decode(sample["labels"], skip_special_tokens=True)
+            # Language stored in sample if available
+            lang = sample.get(self.language_column, "unknown")
             predictions.append(pred)
             references.append(ref)
-            # Get language from original dataset (not in collated batch)
-            # This assumes we can access it - we'll handle in compute_metrics instead
-            languages.append("unknown")
+            languages.append(lang)
 
         model.train()
 
         # Log metrics
-        metrics = compute_wer_cer(predictions, references)
+        metrics = compute_wer_cer_per_language(predictions, references, languages)
         if state.is_world_process_zero:
             print(f"Step {state.global_step}: WER={metrics['wer']:.4f}, CER={metrics['cer']:.4f}")
+            for k, v in metrics.items():
+                if k.startswith("wer_") or k.startswith("cer_"):
+                    print(f"  {k}: {v:.4f}")
             if wandb.run:
-                wandb.log({f"eval_{k}": v for k, v in metrics.items()}, step=state.global_step)
+                wandb.log({f"eval/{k}": v for k, v in metrics.items()}, step=state.global_step)
 
 
 # ─── Main Training Script ───
@@ -156,6 +159,9 @@ class ScriptArguments:
     dataset_kallaama: str = field(default="MOH749/kallaama", metadata={"help": "Kallaama dataset"})
     output_dir: str = field(default="./moss-audio-west-african", metadata={"help": "Output directory"})
 
+    # Flash Attention 2
+    use_flash_attn: bool = field(default=True, metadata={"help": "Use Flash Attention 2 (requires flash-attn)"})
+    
     # LoRA config
     use_lora: bool = field(default=True)
     use_qlora: bool = field(default=True)
@@ -164,10 +170,10 @@ class ScriptArguments:
     lora_dropout: float = field(default=0.05)
     lora_target_modules: str = field(default="q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj")
 
-    # Training
-    per_device_train_batch_size: int = field(default=2)
-    gradient_accumulation_steps: int = field(default=8)
-    learning_rate: float = field(default=1e-4)
+    # Training (optimized for A100/H100)
+    per_device_train_batch_size: int = field(default=8)
+    gradient_accumulation_steps: int = field(default=2)
+    learning_rate: float = field(default=2e-4)
     num_train_epochs: int = field(default=3)
     max_steps: int = field(default=-1)
     warmup_ratio: float = field(default=0.03)
@@ -175,14 +181,15 @@ class ScriptArguments:
     save_steps: int = field(default=500)
     eval_steps: int = field(default=500)
     seed: int = field(default=42)
-
+    
     # Data
     streaming: bool = field(default=True)
     max_train_samples: int = field(default=-1)
-    max_eval_samples: int = field(default=500)
+    max_eval_samples: int = field(default=200)
     audio_column: str = field(default="audio")
     text_column: str = field(default="text")
     language_column: str = field(default="language")
+    dataloader_num_workers: int = field(default=8)
 
     # Hub
     push_to_hub: bool = field(default=True)
@@ -215,6 +222,12 @@ def main():
         wandb.login(key=os.getenv("WANDB_API_KEY"))
         wandb.init(project=args.wandb_project, name=args.wandb_run_name, config=vars(args))
 
+    # ─── Device / dtype ───
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    is_bf16_supported = torch.cuda.is_bf16_supported()
+    torch_dtype = torch.bfloat16 if is_bf16_supported else torch.float16
+    print(f"Device: {device}, dtype: {torch_dtype}, BF16 supported: {is_bf16_supported}")
+
     # ─── Load Processor ───
     print(f"Loading processor from {args.model_id}...")
     processor = AutoProcessor.from_pretrained(
@@ -222,9 +235,25 @@ def main():
         trust_remote_code=True,
     )
 
-    # ─── Load Model ───
+    # ─── Load Model with Flash Attention 2 ───
     print(f"Loading model from {args.model_id}...")
-    torch_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    
+    model_kwargs = {
+        "trust_remote_code": True,
+        "torch_dtype": torch_dtype,
+        "device_map": "auto",
+        "low_cpu_mem_usage": True,
+    }
+    
+    # Add Flash Attention 2 if available and requested
+    if args.use_flash_attn:
+        try:
+            import flash_attn
+            model_kwargs["attn_implementation"] = "flash_attention_2"
+            print("Flash Attention 2 enabled")
+        except ImportError:
+            print("Flash Attention 2 not installed, using default attention")
+            # fall back to default
 
     if args.use_qlora:
         from transformers import BitsAndBytesConfig
@@ -237,19 +266,13 @@ def main():
         model = AutoModelForSpeechSeq2Seq.from_pretrained(
             args.model_id,
             quantization_config=bnb_config,
-            device_map="auto",
-            trust_remote_code=True,
-            torch_dtype=torch_dtype,
-            low_cpu_mem_usage=True,
+            **model_kwargs,
         )
         model = prepare_model_for_kbit_training(model)
     else:
         model = AutoModelForSpeechSeq2Seq.from_pretrained(
             args.model_id,
-            torch_dtype=torch_dtype,
-            device_map="auto",
-            trust_remote_code=True,
-            low_cpu_mem_usage=True,
+            **model_kwargs,
         )
 
     # ─── LoRA ───
@@ -351,7 +374,6 @@ def main():
         labels[labels == -100] = processor.tokenizer.pad_token_id
         label_str = processor.tokenizer.batch_decode(labels, skip_special_tokens=True)
 
-        # We don't have language info in collated batch, so just overall metrics
         metrics = compute_wer_cer(pred_str, label_str)
         return metrics
 
@@ -372,8 +394,8 @@ def main():
         load_best_model_at_end=True,
         metric_for_best_model="eval_wer",
         greater_is_better=False,
-        bf16=torch.cuda.is_bf16_supported(),
-        fp16=not torch.cuda.is_bf16_supported(),
+        bf16=is_bf16_supported,
+        fp16=not is_bf16_supported,
         gradient_checkpointing=True,
         optim="adamw_torch_fused",
         lr_scheduler_type="cosine",
@@ -383,9 +405,10 @@ def main():
         hub_token=hf_token,
         hub_private_repo=args.hub_private_repo,
         seed=args.seed,
-        dataloader_num_workers=4,
+        dataloader_num_workers=args.dataloader_num_workers,
         remove_unused_columns=False,
         ddp_find_unused_parameters=False,
+        save_total_limit=3,
     )
 
     # ─── Trainer ───
