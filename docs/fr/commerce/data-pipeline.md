@@ -39,8 +39,8 @@ REGISTRE DES SOURCES     FABRIQUE                AUGMENTATION              RÉVI
 
 | Actif | Où il en est |
 |---|---|
-| Jeu market-intent | **6 022 lignes** (wo 1 661 · wo-fr 1 863 · fr 1 249 · en 1 249), zéro fuite entre splits |
-| Variantes du modèle-enseignant | 829 acceptées par le garde-fou, en attente de révision native (lot-001 en ligne) |
+| Jeu SFT market-intent | **2 176 lignes** conservées après filtrage qualité (58,5 % de réussite sur 3 721 échantillons de distillation DeepSeek V4 Flash, 4 pistes). Publié sous MOH749/wolof-commerce-sft sur Hugging Face (privé) |
+| Distillation modèle-enseignant | DeepSeek V4 Flash (API Ollama Cloud) a généré 3 721 échantillons synthétiques. Étudiants Qwen3-Omni-30B-A3B (cloud) + MiniMind-O (edge) non entraînés — bloqué par GPU |
 | Corpus wolof réels utilisables | environ 115 h de parole sous licence, 150 k lignes ASR et 116 k paires de traduction inventoriées |
 | Infrastructure de révision | Schéma Supabase en ligne · API garde-fou déployée · convoyeur Sheets/n8n en construction |
 

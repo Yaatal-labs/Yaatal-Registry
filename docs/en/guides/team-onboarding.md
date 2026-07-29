@@ -33,8 +33,11 @@ Neither waits for the other. Research capabilities are *promoted* into the platf
 
 ## The map — where things live
 
-- **Yaatal-Engine** (Rust/Loco on Railway): the spine: auth, commerce, payments, sovereignty
-  types, the cascading AI router.
+- **Yaatal-Engine** (Rust/Loco, engine.njooba.com): the spine: auth, commerce, payments,
+- **Yaatal-Harness** (Rust/axum, edge-turn HTTP :8090): the trust boundary — audits every model action, policy gate (MAX_PRICE_FCFA = 10M), audit JSONL. Model NEVER touches Engine directly.
+  sovereignty types, the cascading AI router.
+- **Yaatal-Harness** (Rust/axum, edge-turn HTTP :8090): the trust boundary — audits every model
+  action, policy gate (MAX_PRICE_FCFA=10M), audit JSONL. Model NEVER touches Engine directly.
 - **Yaatal-Registry** (this portal, React + Vite): the **Single Source of Truth**: docs,
   architecture, data workflows.
 - **BOBO**: the first app (voice market commerce), web on Cloudflare.
@@ -134,8 +137,11 @@ une fois prouvées.
 
 ## La carte — où vit quoi
 
-- **Yaatal-Engine** (Rust/Loco sur Railway): la colonne vertébrale : auth, commerce, paiements,
-  types de souveraineté, routeur IA en cascade.
+- **Yaatal-Engine** (Rust/Loco, engine.njooba.com): la colonne vertébrale : auth, commerce,
+  paiements, types de souveraineté, routeur IA en cascade.
+- **Yaatal-Harness** (Rust/axum, HTTP edge-turn :8090): la frontière de confiance — audite
+  chaque action du modèle, porte de politique (MAX_PRICE_FCFA=10M), audit JSONL. Le modèle ne
+  touche JAMAIS l'Engine directement.
 - **Yaatal-Registry** (ce portail, React + Vite): la **Source Unique de Vérité** : docs,
   architecture, flux de données.
 - **BOBO**: la première app (commerce vocal au marché), web sur Cloudflare.

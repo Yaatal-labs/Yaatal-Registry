@@ -35,8 +35,8 @@ SOURCE REGISTRY          FACTORY                 AUGMENTATION              REVIE
 
 | Asset | Where it stands |
 |---|---|
-| Market-intent dataset | **6,022 rows** (wo 1,661 · wo-fr 1,863 · fr 1,249 · en 1,249), zero split leakage |
-| Teacher-model variants | 829 accepted by the guardrail, awaiting native review (batch-001 live) |
+| Market-intent SFT dataset | **2,176 rows** kept after quality filtering (58.5% pass rate from 3,721 DeepSeek V4 Flash distillation samples, 4 tracks). Published as MOH749/wolof-commerce-sft on Hugging Face (private) |
+| Teacher-model distillation | DeepSeek V4 Flash (Ollama Cloud API) generated 3,721 synthetic samples. Students Qwen3-Omni-30B-A3B (cloud) + MiniMind-O (edge) not trained yet — GPU-gated |
 | Usable real Wolof corpora | about 115 hours of licensed speech, 150k ASR rows and 116k translation pairs inventoried |
 | Review infrastructure | Supabase schema live · guardrail API deployed · Sheets/n8n conveyor in build |
 

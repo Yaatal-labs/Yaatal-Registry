@@ -19,10 +19,10 @@ de la taille d'un téléphone digne de confiance pour du vrai commerce.
 
 | Pièce | État |
 |---|---|
-| **App web BOBO** | en ligne sur Cloudflare, aller-retour complet vers l'Engine sur Railway |
+| **App web BOBO** | en ligne sur Cloudflare, aller-retour complet vers l'Engine (engine.njooba.com) |
 | **Colonne commerce de l'Engine** | en ligne : auth, produits, commandes, checkout, paiements Wave |
-| **Modèle d'intention edge (prototype)** | qualifié. Backbone hybride de moins de 2 Md de paramètres sous Apache-2.0 (sans plafond de licence), entraîné sur des énoncés de marché synthétiques, exporté en GGUF prêt pour téléphone |
-| **Jeu de données market-intent** | 6 022 lignes (wo / wo-fr / fr / en). Augmentation par modèle-enseignant terminée, révision native en cours |
+| **Modèle d'intention edge** | enseignant en ligne : DeepSeek V4 Flash (Ollama Cloud, latence 1,5 s, wolof/français naturel). Étudiants : Qwen3-Omni-30B-A3B (Apache, vLLM cloud) + MiniMind-O (~0,5 Md, Apache, edge). DeepSeek sert d'assistant commerce en ligne sur Telegram (@Shoptal_bot) et WhatsApp. Étudiants non entraînés — bloqué par GPU |
+| **Jeu de données market-intent** | distillation terminée : 3 721 échantillons générés par DeepSeek V4 Flash (4 pistes), 2 176 conservés après filtrage qualité (58,5 % de réussite). Publié sous MOH749/wolof-commerce-sft sur Hugging Face (privé) |
 | **Voix (full duplex)** | voie recherche : un modèle vocal edge souverain bâti sur le même backbone |
 
 ## La porte honnête

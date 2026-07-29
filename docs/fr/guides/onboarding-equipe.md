@@ -31,8 +31,12 @@ uniquement quand elles sont prouvées.
 
 ## La carte du projet — où vit quoi
 
-- **Yaatal-Engine** (Rust / Loco, déployé sur Railway) : la colonne vertébrale : auth, commerce,
+- **Yaatal-Engine** (Rust / Loco, engine.njooba.com) : la colonne vertébrale : auth, commerce,
+- **Yaatal-Harness** (Rust/axum, edge-turn HTTP :8090) : la frontière de confiance — audite chaque action du modèle, porte de stratégie (MAX_PRICE_FCFA = 10M), audit JSONL. Le modèle ne touche JAMAIS l'Engine directement.
   paiements, types de souveraineté, routeur IA en cascade.
+- **Yaatal-Harness** (Rust/axum, HTTP edge-turn :8090) : la frontière de confiance — audite
+  chaque action du modèle, porte de politique (MAX_PRICE_FCFA=10M), audit JSONL. Le modèle ne
+  touche JAMAIS l'Engine directement.
 - **Yaatal-Registry** (ce portail, React + Vite) : la **Source Unique de Vérité** : documentation,
   architecture, flux de données. Ce que vous lisez en fait partie.
 - **BOBO** : la première app (commerce vocal au marché), web sur Cloudflare.
